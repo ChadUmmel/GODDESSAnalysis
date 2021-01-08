@@ -191,7 +191,9 @@ int main() {
     chain->Add(PathToFiles + "219" + ExtraBit);
     chain->Add(PathToFiles + "220" + ExtraBit);
     chain->Add(PathToFiles + "222" + ExtraBit);
+    */
     chain->Add(PathToFiles + "223" + ExtraBit);
+    /*
     chain->Add(PathToFiles + "224" + ExtraBit);
     chain->Add(PathToFiles + "225" + ExtraBit);
     chain->Add(PathToFiles + "226" + ExtraBit);
@@ -216,7 +218,6 @@ int main() {
     chain->Add(PathToFiles + "246" + ExtraBit);
     chain->Add(PathToFiles + "247" + ExtraBit);
     chain->Add(PathToFiles + "248" + ExtraBit);
-    */
     chain->Add(PathToFiles + "249" + ExtraBit);
     chain->Add(PathToFiles + "250" + ExtraBit);
     chain->Add(PathToFiles + "251" + ExtraBit);
@@ -336,12 +337,11 @@ int main() {
     chain->Add(PathToFiles + "384" + ExtraBit);
     chain->Add(PathToFiles + "386" + ExtraBit);
     chain->Add(PathToFiles + "387" + ExtraBit);
-    
+    */
     TFile* fc = new TFile("/mnt/f/GODDESS_134Te/GRETINA_Data/cuts.root","READ"); //IC cuts
     
-    //chain->Add(PathToFiles + "0224.root");
     TTree *data = (TTree*)chain->GetTree();
-		// List of branches
+	// List of branches
 	TBranch        *b_BB10Mul;   //!
 	TBranch        *b_BB10Det;   //!
 	TBranch        *b_BB10Strip;   //!
@@ -464,7 +464,6 @@ int main() {
     //Create the output file and tree
     fout = new TFile("/mnt/f/GODDESS_134Te/GRETINA_Data/out_josh/everything.root", "RECREATE");
     tree = new TTree("tree","134Te(d,pg)135Te Experiment with GODDESS");
-    tree->Branch("IC_PID", &IC_PID, "IC_PID/B");
     tree->Branch("TDC_IC", &TDC_IC, "TDC_IC/F");
     tree->Branch("TDC_GRETINA", &TDC_GRETINA, "TDC_GRETINA/F");
     tree->Branch("TDC_RF", &TDC_RF, "TDC_RF/F");
@@ -473,22 +472,24 @@ int main() {
     tree->Branch("IC_Eres", &IC_Eres, "IC_Eres/F");
     tree->Branch("IC_x", &IC_x, "IC_x/I");
     tree->Branch("IC_y", &IC_y, "IC_y/I");
-    tree->Branch("uQQQ5_Angle", &uQQQ5_Angle, "uQQQ5_Angle/F");
-    tree->Branch("uQQQ5_Energy", &uQQQ5_Energy, "uQQQ5_Energy/F");
-    tree->Branch("dQQQ5_dE", &dQQQ5_dE, "dQQQ5_dE/F");
-    tree->Branch("dQQQ5_E1", &dQQQ5_E1, "dQQQ5_E1/F");
-    tree->Branch("dQQQ5_E2", &dQQQ5_E2, "dQQQ5_E2/F");
-    tree->Branch("dQQQ5_Angle", &dQQQ5_Angle, "dQQQ5_Angle/F");
+    tree->Branch("IC_PID", &IC_PID, "IC_PID/B");
+    tree->Branch("uQQQ5_Angle", &uQQQ5_Angle, "uQQQ5_Angle[128]/F");
+    tree->Branch("uQQQ5_Energy", &uQQQ5_Energy, "uQQQ5_Energy[128]/F");
+    tree->Branch("dQQQ5_dE", &dQQQ5_dE, "dQQQ5_dE[128]/F");
+    tree->Branch("dQQQ5_E1", &dQQQ5_E1, "dQQQ5_E1[128]/F");
+    tree->Branch("dQQQ5_E2", &dQQQ5_E2, "dQQQ5_E2[128]/F");
+    tree->Branch("dQQQ5_Angle", &dQQQ5_Angle, "dQQQ5_Angle[128]/F");
     tree->Branch("dQQQ5_Energy", &dQQQ5_Energy, "dQQQ5_Energy/F");
-    tree->Branch("uSX3_Angle", &uSX3_Angle, "uSX3_Angle/F");
-    tree->Branch("uSX3_Energy", &uSX3_Energy, "uSX3_Energy/F");
-    tree->Branch("dSX3_Angle", &dSX3_Angle, "dSX3_Angle/F");
-    tree->Branch("dSX3_Energy", &dSX3_Energy, "dSX3_Energy/F");
-	tree->Branch("BB10_Energy", &BB10_Energy, "BB10_Energy/F");
+    tree->Branch("uSX3_Angle", &uSX3_Angle, "uSX3_Angle[128]/F");
+    tree->Branch("uSX3_Energy", &uSX3_Energy, "uSX3_Energy[128]/F");
+    tree->Branch("dSX3_Angle", &dSX3_Angle, "dSX3_Angle[128]/F");
+    tree->Branch("dSX3_Energy", &dSX3_Energy, "dSX3_Energy[128]/F");
+	tree->Branch("BB10_Energy", &BB10_Energy, "BB10_Energy[128]/F");
+	tree->Branch("Si_PID", &Si_PID, "Si_PID/B");
     tree->Branch("Si_Angle", &Si_Angle);
     tree->Branch("Si_Energy", &Si_Energy);
     tree->Branch("Ex", &Ex);
-    tree->Branch("Egamma", &Egamma, "Egamma/F");
+    tree->Branch("Egamma", &Egamma, "Egamma[128]/F");
     
     // Load calibration parameters
     std::ifstream uQQQ5bEnCal_file;
@@ -578,10 +579,11 @@ int main() {
 		fc->GetObject(cutname, IC_cut);
     	
     	//Reset tree variables
-    	IC_PID = false;
     	TDC_IC = TDC_GRETINA = TDC_RF = TDC_Si = IC_dE = IC_Eres = NAN;
     	dQQQ5_Energy = 0;
     	IC_x = IC_y = 0;
+    	IC_PID = false;
+    	Si_PID = true;
     	
     	for(int i=0; i<128; i++){
     		uQQQ5_Angle[i] = uQQQ5_Energy[i] = dQQQ5_Angle[i] = dQQQ5_dE[i] = dQQQ5_E1[i] = dQQQ5_E2[i] = uSX3_Angle[i] = uSX3_Energy[i] = dSX3_Angle[i] = dSX3_Energy[i] = BB10_Energy[i] = Egamma[i]= NAN;
@@ -604,7 +606,7 @@ int main() {
     	if(IC_cut->IsInside(IC_Eres,IC_dE)) IC_PID=true;
     	
     	//Reset intermediate variables
-    	dQQQ5_dE_Angle_sum = dQQQ5_E1_Angle_sum = dQQQ5_E2_Angle_sum = telescope_Energy = 0;
+    	dQQQ5_dE_Angle_sum = dQQQ5_E1_Angle_sum = dQQQ5_E2_Angle_sum = 0;
     	dQQQ5_dE_hit = dQQQ5_E1_hit = dQQQ5_E2_hit = 0;
     	
     	//QQQ5
@@ -736,7 +738,7 @@ int main() {
     	for(Int_t j=0; j<SX3Mul; j++){
 			
 			//Reset intermediate variables
-			uSX3f_L = uSX3f_R = uSX3b_Energy = uSX3f_Energy = uSX3f_Position = dSX3f_L = dSX3f_R = dSX3b_Energy = dSX3f_Energy = dSX3f_Position = E3 = p3 = NAN;
+			uSX3f_L = uSX3f_R = uSX3b_Energy = uSX3f_Energy = uSX3f_Position = dSX3f_L = dSX3f_R = dSX3b_Energy = dSX3f_Energy = dSX3f_Position = telescope_energy = E3 = p3 = NAN;
     	
     		if(SX3Upstream[j]) {
 				
@@ -763,6 +765,7 @@ int main() {
 				
 					//Calculate theta from the position on the front strip
 					uSX3_Angle[j] = 180. - TMath::ATan(98./uSX3f_Position)*180./TMath::Pi();
+					if(uSX3_Angle[j]==180) uSX3_Angle[j]=NAN;
 					
 					//Use the backside energy unless it's too small
     				if(uSX3b_Energy < 1000.0 && uSX3f_Energy > uSX3b_Energy) {
@@ -800,6 +803,7 @@ int main() {
 				
 					//Calculate theta from the position on the front strip
 					dSX3_Angle[j] = TMath::ATan(98./dSX3f_Position)*180./TMath::Pi();
+					if(dSX3_Angle[j]<0) dSX3_Angle[j] = -1*dSX3_Angle[j];
 					
 					//Use the backside energy unless it's too small
     				if(dSX3b_Energy < 1000.0 && dSX3f_Energy > dSX3b_Energy) {
@@ -810,16 +814,18 @@ int main() {
     				}
     				
     				if(SX3Det[j]>0 && SX3Det[j]<9) { //These dets have BB10s in front of them
+    					telescope_energy = dSX3_Energy[j];
     					for(int k=0; k<BB10Mul; k++) {
     						BB10_Energy[k] = BB10ADC[k]*BB10EnCal_slope[BB10Det[k]-1][BB10Strip[k]] + BB10EnCal_offset[BB10Det[k]-1][BB10Strip[k]];
     						if(BB10Det[k]==SX3Det[j]) {
-    							Si_Angle.push_back(dSX3_Angle[j]);
-    							Si_Energy.push_back(dSX3_Energy[j]+BB10_Energy[k]);
-    							E3 = Si_Energy.at(Si_Energy.size()-1)+m3;
-    							p3 = TMath::Sqrt(E3*E3-m3*m3);
-    							Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
+    							telescope_energy+=BB10_Energy[k];
     						}
     					}
+    					Si_Angle.push_back(dSX3_Angle[j]);
+						Si_Energy.push_back(telescope_energy);
+						E3 = Si_Energy.at(Si_Energy.size()-1)+m3;
+						p3 = TMath::Sqrt(E3*E3-m3*m3);
+						Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
     				}
     				else {
     					Si_Angle.push_back(dSX3_Angle[j]);
