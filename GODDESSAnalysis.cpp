@@ -191,9 +191,7 @@ int main() {
     chain->Add(PathToFiles + "219" + ExtraBit);
     chain->Add(PathToFiles + "220" + ExtraBit);
     chain->Add(PathToFiles + "222" + ExtraBit);
-    */
     chain->Add(PathToFiles + "223" + ExtraBit);
-    /*
     chain->Add(PathToFiles + "224" + ExtraBit);
     chain->Add(PathToFiles + "225" + ExtraBit);
     chain->Add(PathToFiles + "226" + ExtraBit);
@@ -307,7 +305,9 @@ int main() {
     chain->Add(PathToFiles + "347" + ExtraBit);
     chain->Add(PathToFiles + "348" + ExtraBit);
     chain->Add(PathToFiles + "349" + ExtraBit);
+    */
     chain->Add(PathToFiles + "350" + ExtraBit);
+    /*
     chain->Add(PathToFiles + "351" + ExtraBit);
     chain->Add(PathToFiles + "352" + ExtraBit);
     chain->Add(PathToFiles + "353" + ExtraBit);
@@ -462,7 +462,7 @@ int main() {
 	chain->SetBranchAddress("xtals_timestamp", &xtals_timestamp, &b_xtals_timestamp);
     
     //Create the output file and tree
-    fout = new TFile("/mnt/f/GODDESS_134Te/GRETINA_Data/out_josh/everything.root", "RECREATE");
+    fout = new TFile("/mnt/f/GODDESS_134Te/GRETINA_Data/out_josh/everything2.root", "RECREATE");
     tree = new TTree("tree","134Te(d,pg)135Te Experiment with GODDESS");
     tree->Branch("TDC_IC", &TDC_IC, "TDC_IC/F");
     tree->Branch("TDC_GRETINA", &TDC_GRETINA, "TDC_GRETINA/F");
