@@ -579,15 +579,16 @@ int main() {
     	char cutname[128];
     	sprintf(cutname,"cut%i",runNumber);
     	TCutG* IC_cut;
+    	TCutG* dSi_cut;
 		fc->GetObject(cutname, IC_cut);
+		fc->GetObject("dSi_cut", dSi_cut);
     	
     	//Reset tree variables
     	TDC_IC = TDC_GRETINA = TDC_RF = TDC_Si = IC_dE = IC_Eres = NAN;
     	dQQQ5_Energy = 0;
     	IC_x = IC_y = 0;
     	IC_PID = false;
-    	Si_PID = true;
-    	
+    	Si_PID = false;
     	for(int i=0; i<128; i++){
     		uQQQ5_Angle[i] = uQQQ5_Energy[i] = dQQQ5_Angle[i] = dQQQ5_dE[i] = dQQQ5_E1[i] = dQQQ5_E2[i] = uSX3_Angle[i] = uSX3_Energy[i] = dSX3_Angle[i] = dSX3_Energy[i] = BB10_Energy[i] = Egamma[i]= NAN;
     	}
@@ -620,6 +621,8 @@ int main() {
 			uQQQ5f_Energy = uQQQ5b_Energy = dQQQ5f_Energy = dQQQ5b_Energy = E3 = p3 = NAN;
     	
     		if(QQQ5Upstream[j]) {
+    		
+    			Si_PID = true; //All upstream hits are good
     			
     			//Apply calibration to the hit
     			uQQQ5b_Energy = QQQ5SectorADC[j]*uQQQ5bEnCal_slope[QQQ5Det[j]][QQQ5Sector[j]] + uQQQ5bEnCal_offset[QQQ5Det[j]][QQQ5Sector[j]];
@@ -651,6 +654,9 @@ int main() {
     		
     		//Downstream QQQ5s. Currently sorta buggy.
     		else if(!QQQ5Upstream[j]) {
+    			
+    			Si_PID = false; //Having some trouble with these detectors currently. Will set them all as bad for now.
+    			
     			//Apply calibration to the hit
     			dQQQ5b_Energy = QQQ5SectorADC[j]*dQQQ5bEnCal_slope[QQQ5Det[j]][QQQ5Sector[j]] + dQQQ5bEnCal_offset[QQQ5Det[j]][QQQ5Sector[j]];
     			dQQQ5f_Energy = QQQ5RingADC[j]*dQQQ5fEnCal_slope[QQQ5Det[j]][QQQ5Ring[j]] + dQQQ5fEnCal_offset[QQQ5Det[j]][QQQ5Ring[j]];
@@ -744,6 +750,8 @@ int main() {
 			uSX3f_L = uSX3f_R = uSX3b_Energy = uSX3f_Energy = uSX3f_Position = dSX3f_L = dSX3f_R = dSX3b_Energy = dSX3f_Energy = dSX3f_Position = telescope_energy = E3 = p3 = NAN;
     	
     		if(SX3Upstream[j]) {
+    		
+    			Si_PID = true;
 				
 				//Subtract pedestals and apply gains to front contacts.
 				uSX3f_L = SX3StripLeftADC[j] - uSX3fPedestals_left[SX3Det[j]][SX3Strip[j]];
@@ -817,20 +825,24 @@ int main() {
     				}
     				
     				if(SX3Det[j]>0 && SX3Det[j]<9) { //These dets have BB10s in front of them
-    					telescope_energy = dSX3_Energy[j];
+    					telescope_energy = 0.0;
     					for(int k=0; k<BB10Mul; k++) {
     						BB10_Energy[k] = BB10ADC[k]*BB10EnCal_slope[BB10Det[k]-1][BB10Strip[k]] + BB10EnCal_offset[BB10Det[k]-1][BB10Strip[k]];
     						if(BB10Det[k]==SX3Det[j]) {
     							telescope_energy+=BB10_Energy[k];
     						}
     					}
+    					if(dSi_cut->IsInside(telescope_energy,dSX3_Energy[j])) {
+    						Si_PID=true;
+    					}
     					Si_Angle.push_back(dSX3_Angle[j]);
-						Si_Energy.push_back(telescope_energy);
+						Si_Energy.push_back(telescope_energy+dSX3_Energy[j]);
 						E3 = Si_Energy.at(Si_Energy.size()-1)+m3;
 						p3 = TMath::Sqrt(E3*E3-m3*m3);
 						Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
     				}
     				else {
+    					Si_PID = false; //Can't get a PID here. Throw it all out.
     					Si_Angle.push_back(dSX3_Angle[j]);
     					Si_Energy.push_back(dSX3_Energy[j]);
 						p3 = TMath::Sqrt(E3*E3-m3*m3);
