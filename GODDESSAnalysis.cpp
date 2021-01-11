@@ -22,7 +22,8 @@ int main() {
 	TChain *chain = new TChain("data");
     TString PathToFiles = "/mnt/f/GODDESS_134Te/GRETINA_Data/out_josh/Run0";
     TString ExtraBit = "_combined.root";
-    /*
+
+	/*
     chain->Add(PathToFiles + "019" + ExtraBit);
     chain->Add(PathToFiles + "020" + ExtraBit);
     chain->Add(PathToFiles + "021" + ExtraBit);
@@ -172,6 +173,7 @@ int main() {
     chain->Add(PathToFiles + "198" + ExtraBit);
     chain->Add(PathToFiles + "199" + ExtraBit);
     chain->Add(PathToFiles + "200" + ExtraBit);
+    
     chain->Add(PathToFiles + "203" + ExtraBit);
     chain->Add(PathToFiles + "204" + ExtraBit);
     chain->Add(PathToFiles + "205" + ExtraBit);
@@ -191,7 +193,9 @@ int main() {
     chain->Add(PathToFiles + "219" + ExtraBit);
     chain->Add(PathToFiles + "220" + ExtraBit);
     chain->Add(PathToFiles + "222" + ExtraBit);
+    */
     chain->Add(PathToFiles + "223" + ExtraBit);
+    /*
     chain->Add(PathToFiles + "224" + ExtraBit);
     chain->Add(PathToFiles + "225" + ExtraBit);
     chain->Add(PathToFiles + "226" + ExtraBit);
@@ -262,6 +266,7 @@ int main() {
     chain->Add(PathToFiles + "298" + ExtraBit);
     chain->Add(PathToFiles + "299" + ExtraBit);
     chain->Add(PathToFiles + "300" + ExtraBit);
+    
     chain->Add(PathToFiles + "301" + ExtraBit);
     chain->Add(PathToFiles + "302" + ExtraBit);
     chain->Add(PathToFiles + "304" + ExtraBit);
@@ -305,9 +310,7 @@ int main() {
     chain->Add(PathToFiles + "347" + ExtraBit);
     chain->Add(PathToFiles + "348" + ExtraBit);
     chain->Add(PathToFiles + "349" + ExtraBit);
-    */
     chain->Add(PathToFiles + "350" + ExtraBit);
-    /*
     chain->Add(PathToFiles + "351" + ExtraBit);
     chain->Add(PathToFiles + "352" + ExtraBit);
     chain->Add(PathToFiles + "353" + ExtraBit);
@@ -462,7 +465,7 @@ int main() {
 	chain->SetBranchAddress("xtals_timestamp", &xtals_timestamp, &b_xtals_timestamp);
     
     //Create the output file and tree
-    fout = new TFile("/mnt/f/GODDESS_134Te/GRETINA_Data/out_josh/everything2.root", "RECREATE");
+    fout = new TFile("/mnt/f/GODDESS_134Te/GRETINA_Data/out_josh/out_final/run0223.root", "RECREATE");
     tree = new TTree("tree","134Te(d,pg)135Te Experiment with GODDESS");
     tree->Branch("TDC_IC", &TDC_IC, "TDC_IC/F");
     tree->Branch("TDC_GRETINA", &TDC_GRETINA, "TDC_GRETINA/F");
@@ -627,11 +630,11 @@ int main() {
     			    uQQQ5_Angle[j] = QQQ5Angle[j];
     				
     				//Use the frontside energy unless it's too small
-    				if(uQQQ5f_Energy < 1000.0 && uQQQ5b_Energy > uQQQ5f_Energy) {
-    					uQQQ5_Energy[j] = uQQQ5b_Energy;
+    				if(uQQQ5f_Energy>0) { //< 1000.0 && uQQQ5b_Energy > uQQQ5f_Energy) {
+    					uQQQ5_Energy[j] = uQQQ5f_Energy;
     				}
     				else {
-    					uQQQ5_Energy[j] = uQQQ5f_Energy;
+    					uQQQ5_Energy[j] = uQQQ5b_Energy;
     				}
     				
     				Si_Angle.push_back(uQQQ5_Angle[j]);
@@ -658,29 +661,29 @@ int main() {
  					dQQQ5_Angle[j] = QQQ5Angle[j];
     				
     				//Use the frontside energy unless it's too small
-    				if(dQQQ5f_Energy < 1000.0 && dQQQ5b_Energy > dQQQ5f_Energy) {
+    				if(dQQQ5f_Energy>0) { //< 1000.0 && dQQQ5b_Energy > dQQQ5f_Energy) {
     					if(QQQ5Det[j]==0) {
     						if(dQQQ5_Angle[j]>0) {
     							dQQQ5_dE_hit++; //The dE detector seems to be second best for getting the angle.
     							dQQQ5_dE_Angle_sum += dQQQ5_Angle[j];
     						}
-    						dQQQ5_dE[j] = dQQQ5b_Energy;
+    						dQQQ5_dE[j] = dQQQ5f_Energy;
     					}
     					else if(QQQ5Det[j]==1) {
     						if(dQQQ5_Angle[j]>0){
     							dQQQ5_E1_hit++; //The E1 detector seems to be the best for getting the angle.
     							dQQQ5_E1_Angle_sum += dQQQ5_Angle[j];
     						}
-    						dQQQ5_E1[j] = dQQQ5b_Energy;
+    						dQQQ5_E1[j] = dQQQ5f_Energy;
     					}
     					else if(QQQ5Det[j]==2) {
     						if(dQQQ5_Angle[j]>0){
     							dQQQ5_E2_hit++; //Last resort
     							dQQQ5_E2_Angle_sum += dQQQ5_Angle[j];
     						}
-    						dQQQ5_E2[j] = dQQQ5b_Energy;
+    						dQQQ5_E2[j] = dQQQ5f_Energy;
     					}
-    					dQQQ5_Energy += dQQQ5b_Energy;
+    					dQQQ5_Energy += dQQQ5f_Energy;
     				}
     				else {
     					if(QQQ5Det[j]==0) {
@@ -688,23 +691,23 @@ int main() {
     							dQQQ5_dE_hit++;
     							dQQQ5_dE_Angle_sum += dQQQ5_Angle[j];
     						}
-    						dQQQ5_dE[j] = dQQQ5f_Energy;
+    						dQQQ5_dE[j] = dQQQ5b_Energy;
     					}
     					else if(QQQ5Det[j]==1) {
     						if(dQQQ5_Angle[j]>0){
     							dQQQ5_E1_hit++;
     							dQQQ5_E1_Angle_sum += dQQQ5_Angle[j];
     						}
-    						dQQQ5_E1[j] = dQQQ5f_Energy;
+    						dQQQ5_E1[j] = dQQQ5b_Energy;
     					}
     					else if(QQQ5Det[j]==2) {
     						if(dQQQ5_Angle[j]>0){
     							dQQQ5_E2_hit++;
     							dQQQ5_E2_Angle_sum += dQQQ5_Angle[j];
     						}
-    						dQQQ5_E2[j]= dQQQ5f_Energy;
+    						dQQQ5_E2[j]= dQQQ5b_Energy;
     					}
-    					dQQQ5_Energy += dQQQ5f_Energy;
+    					dQQQ5_Energy += dQQQ5b_Energy;
     				}
     			}
     		}
@@ -768,11 +771,11 @@ int main() {
 					if(uSX3_Angle[j]==180) uSX3_Angle[j]=NAN;
 					
 					//Use the backside energy unless it's too small
-    				if(uSX3b_Energy < 1000.0 && uSX3f_Energy > uSX3b_Energy) {
-    					uSX3_Energy[j] = uSX3f_Energy;
+    				if(uSX3b_Energy > 0) {//< 1000.0 && uSX3f_Energy > uSX3b_Energy) {
+    					uSX3_Energy[j] = uSX3b_Energy;
     				}
     				else {
-    					uSX3_Energy[j] = uSX3b_Energy;
+    					uSX3_Energy[j] = uSX3f_Energy;
     				}
     				
     				Si_Angle.push_back(uSX3_Angle[j]);
@@ -806,11 +809,11 @@ int main() {
 					if(dSX3_Angle[j]<0) dSX3_Angle[j] = -1*dSX3_Angle[j];
 					
 					//Use the backside energy unless it's too small
-    				if(dSX3b_Energy < 1000.0 && dSX3f_Energy > dSX3b_Energy) {
-    					dSX3_Energy[j] = dSX3f_Energy;
+    				if(dSX3b_Energy > 0.0) {// <1000.0 && dSX3f_Energy > dSX3b_Energy) {
+    					dSX3_Energy[j] = dSX3b_Energy;
     				}
     				else {
-    					dSX3_Energy[j] = dSX3b_Energy;
+    					dSX3_Energy[j] = dSX3f_Energy;
     				}
     				
     				if(SX3Det[j]>0 && SX3Det[j]<9) { //These dets have BB10s in front of them
