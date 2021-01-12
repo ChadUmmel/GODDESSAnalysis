@@ -22,8 +22,7 @@ int main() {
 	TChain *chain = new TChain("data");
     TString PathToFiles = "/mnt/f/GODDESS_134Te/GRETINA_Data/out_josh/Run0";
     TString ExtraBit = "_combined.root";
-
-	/*
+	
     chain->Add(PathToFiles + "019" + ExtraBit);
     chain->Add(PathToFiles + "020" + ExtraBit);
     chain->Add(PathToFiles + "021" + ExtraBit);
@@ -54,6 +53,7 @@ int main() {
     chain->Add(PathToFiles + "047" + ExtraBit);
     chain->Add(PathToFiles + "048" + ExtraBit);
     chain->Add(PathToFiles + "049" + ExtraBit);
+    /*
     chain->Add(PathToFiles + "057" + ExtraBit);
     chain->Add(PathToFiles + "058" + ExtraBit);
     chain->Add(PathToFiles + "059" + ExtraBit);
@@ -84,6 +84,7 @@ int main() {
     chain->Add(PathToFiles + "094" + ExtraBit);
     chain->Add(PathToFiles + "099" + ExtraBit);
     chain->Add(PathToFiles + "100" + ExtraBit);
+    /*
     chain->Add(PathToFiles + "101" + ExtraBit);
     chain->Add(PathToFiles + "102" + ExtraBit);
     chain->Add(PathToFiles + "103" + ExtraBit);
@@ -193,9 +194,7 @@ int main() {
     chain->Add(PathToFiles + "219" + ExtraBit);
     chain->Add(PathToFiles + "220" + ExtraBit);
     chain->Add(PathToFiles + "222" + ExtraBit);
-    */
     chain->Add(PathToFiles + "223" + ExtraBit);
-    /*
     chain->Add(PathToFiles + "224" + ExtraBit);
     chain->Add(PathToFiles + "225" + ExtraBit);
     chain->Add(PathToFiles + "226" + ExtraBit);
@@ -222,6 +221,7 @@ int main() {
     chain->Add(PathToFiles + "248" + ExtraBit);
     chain->Add(PathToFiles + "249" + ExtraBit);
     chain->Add(PathToFiles + "250" + ExtraBit);
+    /*
     chain->Add(PathToFiles + "251" + ExtraBit);
     chain->Add(PathToFiles + "252" + ExtraBit);
     chain->Add(PathToFiles + "253" + ExtraBit);
@@ -266,7 +266,7 @@ int main() {
     chain->Add(PathToFiles + "298" + ExtraBit);
     chain->Add(PathToFiles + "299" + ExtraBit);
     chain->Add(PathToFiles + "300" + ExtraBit);
-    
+    /*
     chain->Add(PathToFiles + "301" + ExtraBit);
     chain->Add(PathToFiles + "302" + ExtraBit);
     chain->Add(PathToFiles + "304" + ExtraBit);
@@ -311,6 +311,7 @@ int main() {
     chain->Add(PathToFiles + "348" + ExtraBit);
     chain->Add(PathToFiles + "349" + ExtraBit);
     chain->Add(PathToFiles + "350" + ExtraBit);
+    
     chain->Add(PathToFiles + "351" + ExtraBit);
     chain->Add(PathToFiles + "352" + ExtraBit);
     chain->Add(PathToFiles + "353" + ExtraBit);
@@ -465,7 +466,8 @@ int main() {
 	chain->SetBranchAddress("xtals_timestamp", &xtals_timestamp, &b_xtals_timestamp);
     
     //Create the output file and tree
-    fout = new TFile("/mnt/f/GODDESS_134Te/GRETINA_Data/out_josh/out_final/run0223.root", "RECREATE");
+    fout = new TFile("/mnt/f/GODDESS_134Te/GRETINA_Data/out_josh/out_final/everything1.root", "RECREATE");
+    
     tree = new TTree("tree","134Te(d,pg)135Te Experiment with GODDESS");
     tree->Branch("TDC_IC", &TDC_IC, "TDC_IC/F");
     tree->Branch("TDC_GRETINA", &TDC_GRETINA, "TDC_GRETINA/F");
@@ -832,7 +834,7 @@ int main() {
     							telescope_energy+=BB10_Energy[k];
     						}
     					}
-    					if(dSi_cut->IsInside(telescope_energy,dSX3_Energy[j])) {
+    					if(dSi_cut->IsInside(dSX3_Energy[j], telescope_energy)) {
     						Si_PID=true;
     					}
     					Si_Angle.push_back(dSX3_Angle[j]);
