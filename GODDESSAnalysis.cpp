@@ -84,7 +84,7 @@ int main() {
     chain->Add(PathToFiles + "094" + ExtraBit);
     chain->Add(PathToFiles + "099" + ExtraBit);
     chain->Add(PathToFiles + "100" + ExtraBit);
-    
+    */
     chain->Add(PathToFiles + "101" + ExtraBit);
     chain->Add(PathToFiles + "102" + ExtraBit);
     chain->Add(PathToFiles + "103" + ExtraBit);
@@ -127,7 +127,7 @@ int main() {
     chain->Add(PathToFiles + "148" + ExtraBit);
     chain->Add(PathToFiles + "149" + ExtraBit);
     chain->Add(PathToFiles + "150" + ExtraBit);
-    
+    /*
     chain->Add(PathToFiles + "151" + ExtraBit);
     chain->Add(PathToFiles + "152" + ExtraBit);
     chain->Add(PathToFiles + "153" + ExtraBit);
@@ -195,9 +195,7 @@ int main() {
     chain->Add(PathToFiles + "219" + ExtraBit);
     chain->Add(PathToFiles + "220" + ExtraBit);
     chain->Add(PathToFiles + "222" + ExtraBit);
-    */
     chain->Add(PathToFiles + "223" + ExtraBit);
-    /*
     chain->Add(PathToFiles + "224" + ExtraBit);
     chain->Add(PathToFiles + "225" + ExtraBit);
     chain->Add(PathToFiles + "226" + ExtraBit);
@@ -469,7 +467,7 @@ int main() {
 	chain->SetBranchAddress("xtals_timestamp", &xtals_timestamp, &b_xtals_timestamp);
     
     //Create the output file and tree
-    fout = new TFile("/mnt/f/GODDESS_134Te/GRETINA_Data/out_josh/out_final/run0223.root", "RECREATE");
+    fout = new TFile("/mnt/f/GODDESS_134Te/GRETINA_Data/out_josh/out_final/everything3.root", "RECREATE");
     
     tree = new TTree("tree","134Te(d,pg)135Te Experiment with GODDESS");
     tree->Branch("TDC_IC", &TDC_IC, "TDC_IC/F");
@@ -839,13 +837,11 @@ int main() {
     							BB10_Energy[k] = BB10ADC[k]*BB10EnCal_slope[BB10Det[k]-4][BB10Strip[k]] + BB10EnCal_offset[BB10Det[k]-4][BB10Strip[k]];
     						}
     						if(BB10Det[k]==SX3Det[j]) {
-    							std::cout<<"Passing through the same BB10"<<std::endl;
     							telescope_energy+=BB10_Energy[k];
     						}
     					}
     					
     					if(dSi_cut->IsInside(dSX3_Energy[j],telescope_energy)) {
-    						std::cout<<"And it makes the cut!"<<std::endl;
     						Si_PID=true;
     					}
     					
