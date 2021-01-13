@@ -22,7 +22,7 @@ int main() {
 	TChain *chain = new TChain("data");
     TString PathToFiles = "/mnt/f/GODDESS_134Te/GRETINA_Data/out_josh/Run0";
     TString ExtraBit = "_combined.root";
-	
+	/*
     chain->Add(PathToFiles + "019" + ExtraBit);
     chain->Add(PathToFiles + "020" + ExtraBit);
     chain->Add(PathToFiles + "021" + ExtraBit);
@@ -53,7 +53,7 @@ int main() {
     chain->Add(PathToFiles + "047" + ExtraBit);
     chain->Add(PathToFiles + "048" + ExtraBit);
     chain->Add(PathToFiles + "049" + ExtraBit);
-    /*
+    
     chain->Add(PathToFiles + "057" + ExtraBit);
     chain->Add(PathToFiles + "058" + ExtraBit);
     chain->Add(PathToFiles + "059" + ExtraBit);
@@ -84,7 +84,7 @@ int main() {
     chain->Add(PathToFiles + "094" + ExtraBit);
     chain->Add(PathToFiles + "099" + ExtraBit);
     chain->Add(PathToFiles + "100" + ExtraBit);
-    /*
+    
     chain->Add(PathToFiles + "101" + ExtraBit);
     chain->Add(PathToFiles + "102" + ExtraBit);
     chain->Add(PathToFiles + "103" + ExtraBit);
@@ -127,6 +127,7 @@ int main() {
     chain->Add(PathToFiles + "148" + ExtraBit);
     chain->Add(PathToFiles + "149" + ExtraBit);
     chain->Add(PathToFiles + "150" + ExtraBit);
+    
     chain->Add(PathToFiles + "151" + ExtraBit);
     chain->Add(PathToFiles + "152" + ExtraBit);
     chain->Add(PathToFiles + "153" + ExtraBit);
@@ -194,7 +195,9 @@ int main() {
     chain->Add(PathToFiles + "219" + ExtraBit);
     chain->Add(PathToFiles + "220" + ExtraBit);
     chain->Add(PathToFiles + "222" + ExtraBit);
+    */
     chain->Add(PathToFiles + "223" + ExtraBit);
+    /*
     chain->Add(PathToFiles + "224" + ExtraBit);
     chain->Add(PathToFiles + "225" + ExtraBit);
     chain->Add(PathToFiles + "226" + ExtraBit);
@@ -221,7 +224,7 @@ int main() {
     chain->Add(PathToFiles + "248" + ExtraBit);
     chain->Add(PathToFiles + "249" + ExtraBit);
     chain->Add(PathToFiles + "250" + ExtraBit);
-    /*
+    
     chain->Add(PathToFiles + "251" + ExtraBit);
     chain->Add(PathToFiles + "252" + ExtraBit);
     chain->Add(PathToFiles + "253" + ExtraBit);
@@ -266,7 +269,7 @@ int main() {
     chain->Add(PathToFiles + "298" + ExtraBit);
     chain->Add(PathToFiles + "299" + ExtraBit);
     chain->Add(PathToFiles + "300" + ExtraBit);
-    /*
+    
     chain->Add(PathToFiles + "301" + ExtraBit);
     chain->Add(PathToFiles + "302" + ExtraBit);
     chain->Add(PathToFiles + "304" + ExtraBit);
@@ -466,7 +469,7 @@ int main() {
 	chain->SetBranchAddress("xtals_timestamp", &xtals_timestamp, &b_xtals_timestamp);
     
     //Create the output file and tree
-    fout = new TFile("/mnt/f/GODDESS_134Te/GRETINA_Data/out_josh/out_final/everything1.root", "RECREATE");
+    fout = new TFile("/mnt/f/GODDESS_134Te/GRETINA_Data/out_josh/out_final/run0223.root", "RECREATE");
     
     tree = new TTree("tree","134Te(d,pg)135Te Experiment with GODDESS");
     tree->Branch("TDC_IC", &TDC_IC, "TDC_IC/F");
@@ -829,14 +832,23 @@ int main() {
     				if(SX3Det[j]>0 && SX3Det[j]<9) { //These dets have BB10s in front of them
     					telescope_energy = 0.0;
     					for(int k=0; k<BB10Mul; k++) {
-    						BB10_Energy[k] = BB10ADC[k]*BB10EnCal_slope[BB10Det[k]-1][BB10Strip[k]] + BB10EnCal_offset[BB10Det[k]-1][BB10Strip[k]];
+    						if (BB10Det[k]>1 && BB10Det[k]<6) {
+    							BB10_Energy[k] = BB10ADC[k]*BB10EnCal_slope[BB10Det[k]-2][BB10Strip[k]] + BB10EnCal_offset[BB10Det[k]-2][BB10Strip[k]];
+    						}
+    						else if (BB10Det[k]>7 && BB10Det[k]<12) {
+    							BB10_Energy[k] = BB10ADC[k]*BB10EnCal_slope[BB10Det[k]-4][BB10Strip[k]] + BB10EnCal_offset[BB10Det[k]-4][BB10Strip[k]];
+    						}
     						if(BB10Det[k]==SX3Det[j]) {
+    							std::cout<<"Passing through the same BB10"<<std::endl;
     							telescope_energy+=BB10_Energy[k];
     						}
     					}
-    					if(dSi_cut->IsInside(dSX3_Energy[j], telescope_energy)) {
+    					
+    					if(dSi_cut->IsInside(dSX3_Energy[j],telescope_energy)) {
+    						std::cout<<"And it makes the cut!"<<std::endl;
     						Si_PID=true;
     					}
+    					
     					Si_Angle.push_back(dSX3_Angle[j]);
 						Si_Energy.push_back(telescope_energy+dSX3_Energy[j]);
 						E3 = Si_Energy.at(Si_Energy.size()-1)+m3;
