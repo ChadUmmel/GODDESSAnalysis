@@ -66,6 +66,7 @@ int main() {
     chain->Add(PathToFiles + "066" + ExtraBit);
     chain->Add(PathToFiles + "067" + ExtraBit);
     chain->Add(PathToFiles + "068" + ExtraBit);
+    
     chain->Add(PathToFiles + "076" + ExtraBit);
     chain->Add(PathToFiles + "077" + ExtraBit);
     chain->Add(PathToFiles + "078" + ExtraBit);
@@ -84,7 +85,7 @@ int main() {
     chain->Add(PathToFiles + "094" + ExtraBit);
     chain->Add(PathToFiles + "099" + ExtraBit);
     chain->Add(PathToFiles + "100" + ExtraBit);
-    */
+    
     chain->Add(PathToFiles + "101" + ExtraBit);
     chain->Add(PathToFiles + "102" + ExtraBit);
     chain->Add(PathToFiles + "103" + ExtraBit);
@@ -105,6 +106,7 @@ int main() {
     chain->Add(PathToFiles + "123" + ExtraBit);
     chain->Add(PathToFiles + "124" + ExtraBit);
     chain->Add(PathToFiles + "125" + ExtraBit);
+    
     chain->Add(PathToFiles + "126" + ExtraBit);
     chain->Add(PathToFiles + "127" + ExtraBit);
     chain->Add(PathToFiles + "128" + ExtraBit);
@@ -127,7 +129,7 @@ int main() {
     chain->Add(PathToFiles + "148" + ExtraBit);
     chain->Add(PathToFiles + "149" + ExtraBit);
     chain->Add(PathToFiles + "150" + ExtraBit);
-    /*
+    
     chain->Add(PathToFiles + "151" + ExtraBit);
     chain->Add(PathToFiles + "152" + ExtraBit);
     chain->Add(PathToFiles + "153" + ExtraBit);
@@ -151,6 +153,7 @@ int main() {
     chain->Add(PathToFiles + "173" + ExtraBit);
     chain->Add(PathToFiles + "174" + ExtraBit);
     chain->Add(PathToFiles + "175" + ExtraBit);
+    
     chain->Add(PathToFiles + "177" + ExtraBit);
     chain->Add(PathToFiles + "178" + ExtraBit);
     chain->Add(PathToFiles + "179" + ExtraBit);
@@ -198,6 +201,7 @@ int main() {
     chain->Add(PathToFiles + "223" + ExtraBit);
     chain->Add(PathToFiles + "224" + ExtraBit);
     chain->Add(PathToFiles + "225" + ExtraBit);
+    /*
     chain->Add(PathToFiles + "226" + ExtraBit);
     chain->Add(PathToFiles + "227" + ExtraBit);
     chain->Add(PathToFiles + "228" + ExtraBit);
@@ -243,6 +247,7 @@ int main() {
     chain->Add(PathToFiles + "272" + ExtraBit);
     chain->Add(PathToFiles + "273" + ExtraBit);
     chain->Add(PathToFiles + "274" + ExtraBit);
+    
     chain->Add(PathToFiles + "276" + ExtraBit);
     chain->Add(PathToFiles + "277" + ExtraBit);
     chain->Add(PathToFiles + "278" + ExtraBit);
@@ -291,6 +296,7 @@ int main() {
     chain->Add(PathToFiles + "323" + ExtraBit);
     chain->Add(PathToFiles + "324" + ExtraBit);
     chain->Add(PathToFiles + "325" + ExtraBit);
+    
     chain->Add(PathToFiles + "326" + ExtraBit);
     chain->Add(PathToFiles + "327" + ExtraBit);
     chain->Add(PathToFiles + "329" + ExtraBit);
@@ -312,7 +318,7 @@ int main() {
     chain->Add(PathToFiles + "348" + ExtraBit);
     chain->Add(PathToFiles + "349" + ExtraBit);
     chain->Add(PathToFiles + "350" + ExtraBit);
-    
+    */
     chain->Add(PathToFiles + "351" + ExtraBit);
     chain->Add(PathToFiles + "352" + ExtraBit);
     chain->Add(PathToFiles + "353" + ExtraBit);
@@ -342,7 +348,7 @@ int main() {
     chain->Add(PathToFiles + "384" + ExtraBit);
     chain->Add(PathToFiles + "386" + ExtraBit);
     chain->Add(PathToFiles + "387" + ExtraBit);
-    */
+    
     TFile* fc = new TFile("/mnt/f/GODDESS_134Te/GRETINA_Data/cuts.root","READ"); //IC cuts
     
     TTree *data = (TTree*)chain->GetTree();
@@ -467,7 +473,7 @@ int main() {
 	chain->SetBranchAddress("xtals_timestamp", &xtals_timestamp, &b_xtals_timestamp);
     
     //Create the output file and tree
-    fout = new TFile("/mnt/f/GODDESS_134Te/GRETINA_Data/out_josh/out_final/everything3.root", "RECREATE");
+    fout = new TFile("/mnt/f/GODDESS_134Te/GRETINA_Data/out_josh/out_final/everything14.root", "RECREATE");
     
     tree = new TTree("tree","134Te(d,pg)135Te Experiment with GODDESS");
     tree->Branch("TDC_IC", &TDC_IC, "TDC_IC/F");
@@ -494,6 +500,7 @@ int main() {
 	tree->Branch("Si_PID", &Si_PID, "Si_PID/B");
     tree->Branch("Si_Angle", &Si_Angle);
     tree->Branch("Si_Energy", &Si_Energy);
+    tree->Branch("elastic_protons", &elastic_protons, "elastic_protons/B");
     tree->Branch("Ex", &Ex);
     tree->Branch("Egamma", &Egamma, "Egamma[128]/F");
     
@@ -583,8 +590,10 @@ int main() {
     	sprintf(cutname,"cut%i",runNumber);
     	TCutG* IC_cut;
     	TCutG* dSi_cut;
+    	TCutG* p_elastic_cut;
 		fc->GetObject(cutname, IC_cut);
 		fc->GetObject("dSi_cut", dSi_cut);
+		fc->GetObject("p_elastics", p_elastic_cut);
     	
     	//Reset tree variables
     	TDC_IC = TDC_GRETINA = TDC_RF = TDC_Si = IC_dE = IC_Eres = NAN;
@@ -592,6 +601,7 @@ int main() {
     	IC_x = IC_y = 0;
     	IC_PID = false;
     	Si_PID = false;
+    	elastic_protons = false;
     	for(int i=0; i<128; i++){
     		uQQQ5_Angle[i] = uQQQ5_Energy[i] = dQQQ5_Angle[i] = dQQQ5_dE[i] = dQQQ5_E1[i] = dQQQ5_E2[i] = uSX3_Angle[i] = uSX3_Energy[i] = dSX3_Angle[i] = dSX3_Energy[i] = BB10_Energy[i] = Egamma[i]= NAN;
     	}
@@ -776,6 +786,8 @@ int main() {
 				
 				//Check if the energies look reasonable
 				if(uSX3f_Energy > 0 || uSX3b_Energy > 0) {// && uSX3f_Energy/uSX3b_Energy > 0.9 && uSX3f_Energy/uSX3b_Energy < 1.1) {
+					
+					//std::cout<<"entry = "<<jentry<<", j = "<<j<<", uSX3f_Energy = "<<uSX3f_Energy<<", uSX3b_Energy = "<<uSX3b_Energy<<std::endl;
 				
 					//Calculate theta from the position on the front strip
 					uSX3_Angle[j] = 180. - TMath::ATan(98./uSX3f_Position)*180./TMath::Pi();
@@ -847,6 +859,11 @@ int main() {
     					
     					Si_Angle.push_back(dSX3_Angle[j]);
 						Si_Energy.push_back(telescope_energy+dSX3_Energy[j]);
+						
+						if(p_elastic_cut->IsInside(Si_Angle.at(Si_Angle.size()-1),Si_Energy.at(Si_Energy.size()-1))) {
+							elastic_protons = true;
+						}
+						
 						E3 = Si_Energy.at(Si_Energy.size()-1)+m3;
 						p3 = TMath::Sqrt(E3*E3-m3*m3);
 						Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
@@ -855,6 +872,11 @@ int main() {
     					Si_PID = false; //Can't get a PID here. Throw it all out.
     					Si_Angle.push_back(dSX3_Angle[j]);
     					Si_Energy.push_back(dSX3_Energy[j]);
+    					
+    					if(p_elastic_cut->IsInside(Si_Angle.at(Si_Angle.size()-1),Si_Energy.at(Si_Energy.size()-1))) {
+							elastic_protons = true;
+						}
+    					
 						p3 = TMath::Sqrt(E3*E3-m3*m3);
 						Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
     				}

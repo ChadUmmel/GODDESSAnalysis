@@ -11,7 +11,7 @@ These calibration .dat files can be constructed using the excellent suite of cal
 
 Compile using g++ GODDESSAnalysis.cpp -std=c++0x `root-config --cflags --libs` -o GODDESSAnalysis
 
-NOTE: I do not recommend sorting more than ~100 files in your chain at once.
+NOTE: I do not recommend sorting more than ~50 files in your chain at once.
 Doing so will lead to memory management issues.
 The output files can be recombined using hadd [summedfilename].root *.root
 
