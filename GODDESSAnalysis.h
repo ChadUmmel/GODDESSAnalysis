@@ -87,7 +87,7 @@ Long64_t current;
 //Output file and tree
 TFile* fout;
 TTree* tree;
-bool IC_PID, Si_PID;
+bool IC_PID, Si_PID, elastic_protons;
 float TDC_IC, TDC_GRETINA, TDC_RF, TDC_Si, IC_dE, IC_Eres, uQQQ5_Angle[128], uQQQ5_Energy[128], dQQQ5_Angle[128], dQQQ5_dE[128], dQQQ5_E1[128], dQQQ5_E2[128], dQQQ5_Energy, uSX3_Angle[128], uSX3_Energy[128], dSX3_Angle[128], dSX3_Energy[128], BB10_Energy[128], Egamma[128];
 std::vector<float> Si_Angle, Si_Energy, Ex; //These need to be vectors
 int IC_x, IC_y;
@@ -117,7 +117,7 @@ Double_t p1 = sqrt(Ebeam*Ebeam+(2.0*m134Te*Ebeam));
 */
 
 //Arrays to store calibration parameters
-double uQQQ5bEnCal_slope[4][4], uQQQ5bEnCal_offset[4][4], dQQQ5bEnCal_slope[3][4], dQQQ5bEnCal_offset[3][4], uQQQ5fEnCal_slope[4][32], uQQQ5fEnCal_offset[4][32], dQQQ5fEnCal_slope[3][32], dQQQ5fEnCal_offset[3][32], BB10EnCal_slope[8][8], BB10EnCal_offset[8][8], uSX3bPedestals[12][4], dSX3bPedestals[12][4], uSX3fPedestals_left[12][4], uSX3fPedestals_right[12][4], dSX3fPedestals_left[12][4], dSX3fPedestals_right[12][4], uSX3fGains[12][4], dSX3fGains[12][4], uSX3bEnCal_slope[12][4][4], uSX3bEnCal_offset[12][4][4], dSX3bEnCal_slope[12][4][4], dSX3bEnCal_offset[12][4][4], uSX3fEnCal_slope[12][4][4],uSX3fEnCal_offset[12][4][4], dSX3fEnCal_slope[12][4][4], dSX3fEnCal_offset[12][4][4], uSX3fPosCal_left[12][4], uSX3fPosCal_right[12][4], dSX3fPosCal_left[12][4], dSX3fPosCal_right[12][4];
+double uQQQ5fAngleCal[32], dQQQ5fAngleCal[32], uQQQ5bEnCal_slope[4][4], uQQQ5bEnCal_offset[4][4], dQQQ5bEnCal_slope[3][4], dQQQ5bEnCal_offset[3][4], uQQQ5fEnCal_slope[4][32], uQQQ5fEnCal_offset[4][32], dQQQ5fEnCal_slope[3][32], dQQQ5fEnCal_offset[3][32], BB10EnCal_slope[8][8], BB10EnCal_offset[8][8], uSX3bPedestals[12][4], dSX3bPedestals[12][4], uSX3fPedestals_left[12][4], uSX3fPedestals_right[12][4], dSX3fPedestals_left[12][4], dSX3fPedestals_right[12][4], uSX3fGains[12][4], dSX3fGains[12][4], uSX3bEnCal_slope[12][4][4], uSX3bEnCal_offset[12][4][4], dSX3bEnCal_slope[12][4][4], dSX3bEnCal_offset[12][4][4], uSX3fEnCal_slope[12][4][4],uSX3fEnCal_offset[12][4][4], dSX3fEnCal_slope[12][4][4], dSX3fEnCal_offset[12][4][4], uSX3fPosCal_left[12][4], uSX3fPosCal_right[12][4], dSX3fPosCal_left[12][4], dSX3fPosCal_right[12][4];
 
 //Intermediate values
 float uQQQ5f_Energy, uQQQ5b_Energy, dQQQ5f_Energy, dQQQ5b_Energy, dQQQ5_dE_Angle_sum, dQQQ5_E1_Angle_sum, dQQQ5_E2_Angle_sum, uSX3f_L, uSX3f_R, uSX3b_Energy, uSX3f_Energy, uSX3f_Position, dSX3f_L, dSX3f_R, dSX3b_Energy, dSX3f_Energy, dSX3f_Position, telescope_energy;

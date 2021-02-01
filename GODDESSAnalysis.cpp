@@ -198,7 +198,9 @@ int main() {
     chain->Add(PathToFiles + "219" + ExtraBit);
     chain->Add(PathToFiles + "220" + ExtraBit);
     chain->Add(PathToFiles + "222" + ExtraBit);
+    */
     chain->Add(PathToFiles + "223" + ExtraBit);
+    /*
     chain->Add(PathToFiles + "224" + ExtraBit);
     chain->Add(PathToFiles + "225" + ExtraBit);
     /*
@@ -318,7 +320,7 @@ int main() {
     chain->Add(PathToFiles + "348" + ExtraBit);
     chain->Add(PathToFiles + "349" + ExtraBit);
     chain->Add(PathToFiles + "350" + ExtraBit);
-    */
+    
     chain->Add(PathToFiles + "351" + ExtraBit);
     chain->Add(PathToFiles + "352" + ExtraBit);
     chain->Add(PathToFiles + "353" + ExtraBit);
@@ -348,7 +350,7 @@ int main() {
     chain->Add(PathToFiles + "384" + ExtraBit);
     chain->Add(PathToFiles + "386" + ExtraBit);
     chain->Add(PathToFiles + "387" + ExtraBit);
-    
+    */
     TFile* fc = new TFile("/mnt/f/GODDESS_134Te/GRETINA_Data/cuts.root","READ"); //IC cuts
     
     TTree *data = (TTree*)chain->GetTree();
@@ -473,7 +475,7 @@ int main() {
 	chain->SetBranchAddress("xtals_timestamp", &xtals_timestamp, &b_xtals_timestamp);
     
     //Create the output file and tree
-    fout = new TFile("/mnt/f/GODDESS_134Te/GRETINA_Data/out_josh/out_final/everything14.root", "RECREATE");
+    fout = new TFile("/mnt/f/GODDESS_134Te/GRETINA_Data/out_josh/out_final/run223.root", "RECREATE");
     
     tree = new TTree("tree","134Te(d,pg)135Te Experiment with GODDESS");
     tree->Branch("TDC_IC", &TDC_IC, "TDC_IC/F");
@@ -505,6 +507,16 @@ int main() {
     tree->Branch("Egamma", &Egamma, "Egamma[128]/F");
     
     // Load calibration parameters
+    std::ifstream uQQQ5fAngle_file;
+    std::ifstream dQQQ5fAngle_file;
+    uQQQ5fAngle_file.open("cal_files/uQQQ5fAngle.dat");
+    dQQQ5fAngle_file.open("cal_files/dQQQ5fAngle.dat");
+    for(Int_t i=0; i<32; i++) {
+    	uQQQ5fAngle_file >> uQQQ5fAngleCal[i];
+    	dQQQ5fAngle_file >> dQQQ5fAngleCal[i];
+    }
+    
+    
     std::ifstream uQQQ5bEnCal_file;
     uQQQ5bEnCal_file.open("cal_files/uQQQ5bEnCal.dat");
     for(Int_t i=0; i<16; i++) {
@@ -638,12 +650,12 @@ int main() {
     			Si_PID = true; //All upstream hits are good
     			
     			//Apply calibration to the hit
+    			uQQQ5_Angle[j] = uQQQ5fAngleCal[QQQ5Ring[j]];
     			uQQQ5b_Energy = QQQ5SectorADC[j]*uQQQ5bEnCal_slope[QQQ5Det[j]][QQQ5Sector[j]] + uQQQ5bEnCal_offset[QQQ5Det[j]][QQQ5Sector[j]];
     			uQQQ5f_Energy = QQQ5RingADC[j]*uQQQ5fEnCal_slope[QQQ5Det[j]][QQQ5Ring[j]] + uQQQ5fEnCal_offset[QQQ5Det[j]][QQQ5Ring[j]];
     			
     			//Compare front and backside energies. They should be close. If not, throw it out
     			if(uQQQ5f_Energy > 0 || uQQQ5b_Energy > 0) { //&& uQQQ5f_Energy/uQQQ5b_Energy > 0.9 && uQQQ5f_Energy/uQQQ5b_Energy < 1.1) {
-    			    uQQQ5_Angle[j] = QQQ5Angle[j];
     				
     				//Use the frontside energy unless it's too small
     				if(uQQQ5f_Energy>0) { //< 1000.0 && uQQQ5b_Energy > uQQQ5f_Energy) {
@@ -657,7 +669,7 @@ int main() {
     				
     				Si_Energy.push_back(uQQQ5_Energy[j]);
     						
-    				E3 = Si_Energy.at(Si_Energy.size()-1)+m3;
+    				E3 = Si_Energy.at(Si_Energy.size()-1)+m3;    				
     				p3 = TMath::Sqrt(E3*E3-m3*m3);
     				
     				Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
@@ -671,13 +683,12 @@ int main() {
     			Si_PID = false; //Having some trouble with these detectors currently. Will set them all as bad for now.
     			
     			//Apply calibration to the hit
+    			dQQQ5_Angle[j] = dQQQ5fAngleCal[QQQ5Ring[j]];
     			dQQQ5b_Energy = QQQ5SectorADC[j]*dQQQ5bEnCal_slope[QQQ5Det[j]][QQQ5Sector[j]] + dQQQ5bEnCal_offset[QQQ5Det[j]][QQQ5Sector[j]];
     			dQQQ5f_Energy = QQQ5RingADC[j]*dQQQ5fEnCal_slope[QQQ5Det[j]][QQQ5Ring[j]] + dQQQ5fEnCal_offset[QQQ5Det[j]][QQQ5Ring[j]];
     			
     			//Compare front and backside energies. They should be close. If not, throw it out
     			if(dQQQ5f_Energy > 0 || dQQQ5b_Energy > 0) {// && dQQQ5f_Energy/dQQQ5b_Energy > 0.9 && dQQQ5f_Energy/dQQQ5b_Energy < 1.1) {
- 
- 					dQQQ5_Angle[j] = QQQ5Angle[j];
     				
     				//Use the frontside energy unless it's too small
     				if(dQQQ5f_Energy>0) { //< 1000.0 && dQQQ5b_Energy > dQQQ5f_Energy) {
@@ -737,21 +748,21 @@ int main() {
     		Si_Energy.push_back(dQQQ5_Energy);
     		E3 = Si_Energy.at(Si_Energy.size()-1)+m3;
     		p3 = TMath::Sqrt(E3*E3-m3*m3);
-    		Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
+    		//Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
     	}
     	else if(dQQQ5_dE_hit>0) {
     		Si_Angle.push_back(dQQQ5_dE_Angle_sum/dQQQ5_dE_hit);
     		Si_Energy.push_back(dQQQ5_Energy);
     		E3 = Si_Energy.at(Si_Energy.size()-1)+m3;
     		p3 = TMath::Sqrt(E3*E3-m3*m3);
-    		Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
+    		//Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
     	}
     	else if(dQQQ5_E2_hit>0) {
     		Si_Angle.push_back(dQQQ5_E2_Angle_sum/dQQQ5_E2_hit);
     		Si_Energy.push_back(dQQQ5_Energy);
     		E3 = Si_Energy.at(Si_Energy.size()-1)+m3;
     		p3 = TMath::Sqrt(E3*E3-m3*m3);
-    		Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
+    		//Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
     	}
     	
     	//SX3 Time
@@ -806,7 +817,7 @@ int main() {
     				
     				E3 = Si_Energy.at(Si_Energy.size()-1)+m3;
     				p3 = TMath::Sqrt(E3*E3-m3*m3);
-    				Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
+    				//Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
 				}
     		
     		}
@@ -866,7 +877,7 @@ int main() {
 						
 						E3 = Si_Energy.at(Si_Energy.size()-1)+m3;
 						p3 = TMath::Sqrt(E3*E3-m3*m3);
-						Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
+						//Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
     				}
     				else {
     					Si_PID = false; //Can't get a PID here. Throw it all out.
@@ -878,7 +889,7 @@ int main() {
 						}
     					
 						p3 = TMath::Sqrt(E3*E3-m3*m3);
-						Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
+						//Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
     				}
     			}
     		}
