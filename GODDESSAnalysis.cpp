@@ -203,7 +203,7 @@ int main() {
     /*
     chain->Add(PathToFiles + "224" + ExtraBit);
     chain->Add(PathToFiles + "225" + ExtraBit);
-    /*
+    
     chain->Add(PathToFiles + "226" + ExtraBit);
     chain->Add(PathToFiles + "227" + ExtraBit);
     chain->Add(PathToFiles + "228" + ExtraBit);
@@ -503,7 +503,10 @@ int main() {
     tree->Branch("Si_Angle", &Si_Angle);
     tree->Branch("Si_Energy", &Si_Energy);
     tree->Branch("elastic_protons", &elastic_protons, "elastic_protons/B");
-    tree->Branch("Ex", &Ex);
+    tree->Branch("uQQQ5_Ex", &uQQQ5_Ex);
+    tree->Branch("dQQQ5_Ex", &dQQQ5_Ex);
+    tree->Branch("uSX3_Ex", &uSX3_Ex);
+    tree->Branch("dSX3_Ex", &dSX3_Ex);
     tree->Branch("Egamma", &Egamma, "Egamma[128]/F");
     
     // Load calibration parameters
@@ -620,7 +623,10 @@ int main() {
     	
     	Si_Energy.clear();
     	Si_Angle.clear();
-    	Ex.clear();
+    	uQQQ5_Ex.clear();
+    	dQQQ5_Ex.clear();
+    	uSX3_Ex.clear();
+    	dSX3_Ex.clear();
     	
     	//IC and TDC branches are simple
     	TDC_IC = tdcIC;
@@ -672,7 +678,7 @@ int main() {
     				E3 = Si_Energy.at(Si_Energy.size()-1)+m3;    				
     				p3 = TMath::Sqrt(E3*E3-m3*m3);
     				
-    				Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
+    				uQQQ5_Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
     			}
     			
     		}
@@ -748,21 +754,21 @@ int main() {
     		Si_Energy.push_back(dQQQ5_Energy);
     		E3 = Si_Energy.at(Si_Energy.size()-1)+m3;
     		p3 = TMath::Sqrt(E3*E3-m3*m3);
-    		//Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
+    		dQQQ5_Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
     	}
     	else if(dQQQ5_dE_hit>0) {
     		Si_Angle.push_back(dQQQ5_dE_Angle_sum/dQQQ5_dE_hit);
     		Si_Energy.push_back(dQQQ5_Energy);
     		E3 = Si_Energy.at(Si_Energy.size()-1)+m3;
     		p3 = TMath::Sqrt(E3*E3-m3*m3);
-    		//Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
+    		dQQQ5_Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
     	}
     	else if(dQQQ5_E2_hit>0) {
     		Si_Angle.push_back(dQQQ5_E2_Angle_sum/dQQQ5_E2_hit);
     		Si_Energy.push_back(dQQQ5_Energy);
     		E3 = Si_Energy.at(Si_Energy.size()-1)+m3;
     		p3 = TMath::Sqrt(E3*E3-m3*m3);
-    		//Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
+    		dQQQ5_Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
     	}
     	
     	//SX3 Time
@@ -817,7 +823,7 @@ int main() {
     				
     				E3 = Si_Energy.at(Si_Energy.size()-1)+m3;
     				p3 = TMath::Sqrt(E3*E3-m3*m3);
-    				//Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
+    				uSX3_Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
 				}
     		
     		}
@@ -877,7 +883,7 @@ int main() {
 						
 						E3 = Si_Energy.at(Si_Energy.size()-1)+m3;
 						p3 = TMath::Sqrt(E3*E3-m3*m3);
-						//Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
+						dSX3_Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
     				}
     				else {
     					Si_PID = false; //Can't get a PID here. Throw it all out.
@@ -889,7 +895,7 @@ int main() {
 						}
     					
 						p3 = TMath::Sqrt(E3*E3-m3*m3);
-						//Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
+						dSX3_Ex.push_back(TMath::Sqrt(m1*m1 + m2*m2 + 2.*E1*m2 + m3*m3 - 2*(E3*(E1+m2) - p1*p3*TMath::Cos(Si_Angle.at(Si_Angle.size()-1)*TMath::Pi()/180.))) - m4);
     				}
     			}
     		}

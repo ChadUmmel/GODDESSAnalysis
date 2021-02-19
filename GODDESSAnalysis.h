@@ -89,7 +89,7 @@ TFile* fout;
 TTree* tree;
 bool IC_PID, Si_PID, elastic_protons;
 float TDC_IC, TDC_GRETINA, TDC_RF, TDC_Si, IC_dE, IC_Eres, uQQQ5_Angle[128], uQQQ5_Energy[128], dQQQ5_Angle[128], dQQQ5_dE[128], dQQQ5_E1[128], dQQQ5_E2[128], dQQQ5_Energy, uSX3_Angle[128], uSX3_Energy[128], dSX3_Angle[128], dSX3_Energy[128], BB10_Energy[128], Egamma[128];
-std::vector<float> Si_Angle, Si_Energy, Ex; //These need to be vectors
+std::vector<float> Si_Angle, Si_Energy, uQQQ5_Ex, dQQQ5_Ex, uSX3_Ex, dSX3_Ex; //These need to be vectors
 int IC_x, IC_y;
 
 // Some static variables for the code
