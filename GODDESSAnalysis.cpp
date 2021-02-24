@@ -19,9 +19,16 @@ int main(int argc, char** argv){
 }
 
 void GODDESSAnalysis::SortAndAnalyze(Int_t RunNum){
+
+	//std::cout << "\t****************************************************" << std::endl;
+	//std::cout << "\t*        Cool analysis code written by Chad        *" << std::endl;
+	//std::cout << "\t*Sorts the tree output by goddessSort (Josh Hooker)*" <<std::endl;
+	//std::cout << "\t*into interesting stuff like Ex and whatnot        *" << std::endl;
+	//std::cout << "\t****************************************************" << std::endl;
+	//std::cout <<"\nThe parameters in the Analysis.h file can be adjusted to suit the specifics (beam, target, etc.) of your experiment\n"<<std::endl;
 	
 	TString PathToFiles = "/mnt/f/GODDESS_134Te/GRETINA_Data/out_josh/Run0";
-	TString PathToOutput = "/mnt/f/GODDESS_134Te/GRETINA_Data/out_josh/out_final/run0";
+	TString PathToOutput = "/mnt/f/GODDESS_134Te/GRETINA_Data/out_josh/out_final/run";
     TString ExtraBit = "_combined.root";
 	
 	char runbuf[128];
