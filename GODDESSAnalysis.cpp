@@ -4,24 +4,48 @@
 #define GODDESSAnalysis_cxx
 
 #include "GODDESSAnalysis.h"
-
 #include <string>
 #include <iostream>
 #include <array>
 #include <vector>
 
-int main() {
-	std::cout << "\t****************************************************" << std::endl;
-	std::cout << "\t*        Cool analysis code written by Chad        *" << std::endl;
-	std::cout << "\t*Sorts the tree output by goddessSort (Josh Hooker)*" <<std::endl;
-	std::cout << "\t*into interesting stuff like Ex and whatnot        *" << std::endl;
-	std::cout << "\t****************************************************" << std::endl;
-	std::cout <<"\nThe parameters in the Analysis.h file can be adjusted to suit the specifics (beam, target, etc.) of your experiment\n"<<std::endl;
+int main(int argc, char** argv){ 
+  GODDESSAnalysis *myAnalysis = new GODDESSAnalysis();
+
+  int num; 
+  sscanf (argv[1],"%d",&num);
+  myAnalysis->SortAndAnalyze(num);
+  return 0;
+}
+
+void GODDESSAnalysis::SortAndAnalyze(Int_t RunNum){
+	
+	TString PathToFiles = "/mnt/f/GODDESS_134Te/GRETINA_Data/out_josh/Run0";
+	TString PathToOutput = "/mnt/f/GODDESS_134Te/GRETINA_Data/out_josh/out_final/run0";
+    TString ExtraBit = "_combined.root";
+	
+	char runbuf[128];
+	if(RunNum<10){ 
+		sprintf(runbuf, PathToFiles+"00%d"+ExtraBit, RunNum);
+	} else if(RunNum<100){ 
+		sprintf(runbuf, PathToFiles+"0%d"+ExtraBit, RunNum);
+	} else{
+		sprintf(runbuf, PathToFiles+"%d"+ExtraBit, RunNum);
+	}
+
+	char outbuf[128];
+	if(RunNum<10){ 
+		sprintf(outbuf, PathToOutput+"00%d.root", RunNum);
+	} else if(RunNum<100){ 
+		sprintf(outbuf, PathToOutput+"0%d.root", RunNum);
+	} else{
+		sprintf(outbuf, PathToOutput+"%d.root", RunNum);
+	}
+	
+	TFile *fin = new TFile(runbuf,"READ");
 
 	//Add the files
-	TChain *chain = new TChain("data");
-    TString PathToFiles = "/mnt/f/GODDESS_134Te/GRETINA_Data/out_josh/Run0";
-    TString ExtraBit = "_combined.root";
+	//TChain *chain = new TChain("data");
 	/*
     chain->Add(PathToFiles + "019" + ExtraBit);
     chain->Add(PathToFiles + "020" + ExtraBit);
@@ -199,7 +223,7 @@ int main() {
     chain->Add(PathToFiles + "220" + ExtraBit);
     chain->Add(PathToFiles + "222" + ExtraBit);
     */
-    chain->Add(PathToFiles + "223" + ExtraBit);
+    //chain->Add(PathToFiles + "223" + ExtraBit);
     /*
     chain->Add(PathToFiles + "224" + ExtraBit);
     chain->Add(PathToFiles + "225" + ExtraBit);
@@ -351,9 +375,11 @@ int main() {
     chain->Add(PathToFiles + "386" + ExtraBit);
     chain->Add(PathToFiles + "387" + ExtraBit);
     */
+    
+    
     TFile* fc = new TFile("/mnt/f/GODDESS_134Te/GRETINA_Data/cuts.root","READ"); //IC cuts
     
-    TTree *data = (TTree*)chain->GetTree();
+    TTree *chain = (TTree*)fin->Get("data");
 	// List of branches
 	TBranch        *b_BB10Mul;   //!
 	TBranch        *b_BB10Det;   //!
@@ -475,7 +501,8 @@ int main() {
 	chain->SetBranchAddress("xtals_timestamp", &xtals_timestamp, &b_xtals_timestamp);
     
     //Create the output file and tree
-    fout = new TFile("/mnt/f/GODDESS_134Te/GRETINA_Data/out_josh/out_final/run223.root", "RECREATE");
+    //fout = new TFile("/mnt/f/GODDESS_134Te/GRETINA_Data/out_josh/out_final/run223.root", "RECREATE");
+    TFile *fout = new TFile(outbuf,"RECREATE");
     
     tree = new TTree("tree","134Te(d,pg)135Te Experiment with GODDESS");
     tree->Branch("TDC_IC", &TDC_IC, "TDC_IC/F");
@@ -589,20 +616,20 @@ int main() {
     	current = chain->GetEntry(jentry);
 		
 		// Get run number for TCutG and whatever else
-    	std::string fileName = chain->GetCurrentFile()->GetName();
-    	fileName.erase(fileName.begin(), fileName.end() - 17);
-    	fileName.erase(fileName.end() - 14, fileName.end());
-    	TString runNumberStr = fileName;
-    	int runNumber = std::stoi(fileName);
-    	if(runNumber!=prevRunNumber) {
-    		prevRunNumber = runNumber;
-    		std::cout << "Sorting Run #" << runNumberStr <<std::endl;
-    		std::cout<<"Entry " << jentry << " of " << nentries << ", " << 100 * jentry/nentries << "% complete" << "\r\n" << std::flush;
+    	//std::string fileName = chain->GetCurrentFile()->GetName();
+    	//fileName.erase(fileName.begin(), fileName.end() - 17);
+    	//fileName.erase(fileName.end() - 14, fileName.end());
+    	//TString runNumberStr = fileName;
+    	//int runNumber = std::stoi(fileName);
+    	if(RunNum!=prevRunNumber) {
+    		prevRunNumber = RunNum;
+    		std::cout << "Sorting Run #" << RunNum <<std::endl;
+    		//std::cout<<"Entry " << jentry << " of " << nentries << ", " << 100 * jentry/nentries << "% complete" << "\r\n" << std::flush;
     	}
     	
     	//Load IC cuts
     	char cutname[128];
-    	sprintf(cutname,"cut%i",runNumber);
+    	sprintf(cutname,"cut%i",RunNum);
     	TCutG* IC_cut;
     	TCutG* dSi_cut;
     	TCutG* p_elastic_cut;
@@ -908,7 +935,7 @@ int main() {
     	
     	tree->Fill();
     	
-    	if(jentry%100000 == 0) {
+    	if(jentry%10000 == 0) {
     		std::cout<<"Entry " << jentry << " of " << nentries << ", " << 100 * jentry/nentries << "% complete" << "\r\n" << std::flush;
     	}
     }
