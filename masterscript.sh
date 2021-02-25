@@ -1,10 +1,10 @@
 #!/bin/bash
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./lib
-echo "****************************************************"
-echo "*        Cool analysis code written by Chad        *"
-echo "*Sorts the tree output by goddessSort (Josh Hooker)*"
-echo "*into interesting stuff like Ex and whatnot        *"
-echo "****************************************************"
+echo "	****************************************************"
+echo "	*        Cool analysis code written by Chad        *"
+echo "	*Sorts the tree output by goddessSort (Josh Hooker)*"
+echo "	*into interesting stuff like Ex and whatnot        *"
+echo "	****************************************************"
 echo ""
 echo "Run this script by doing './masterscript.sh x y', where x and y are your first and last run. No preceding zeroes needed."
 echo ""
